@@ -1,4 +1,4 @@
-local footnotes = require("md-footnotes.footnotes")
+local footnotes = require("notes.footnotes")
 
 local M = {}
 
