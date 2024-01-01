@@ -13,8 +13,6 @@ exe "lua package.path = package.path .. ';" . s:lua_deps_loc . "/lua-?/init.lua'
 
 " Define commands
 command! -nargs=0 FindFootnotes lua require("notes").find_footnotes()
-command! -nargs=0 FindInlineNotes lua require("notes").find_inline_notes()
+command! -nargs=0 ReorderFootnotes lua require("notes").reorder_footnotes()
 
-" This is an inline note. ^[inline note]
-" This is a reference[^1]
-" [^1]: This is the reference body.
+

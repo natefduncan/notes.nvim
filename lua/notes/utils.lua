@@ -5,6 +5,16 @@ function M.buffer_to_string()
     return table.concat(content, "\n")
 end
 
+function M.string_to_buffer(string)
+    local sep = "\n"
+    local t={}
+    for str in string.gmatch(string, "([^"..sep.."]+)") do
+        table.insert(t, str)
+    end
+    local buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, t)
+end
+
 local function dump(o)
    if type(o) == 'table' then
       local s = '{ '
