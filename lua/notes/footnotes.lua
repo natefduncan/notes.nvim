@@ -102,4 +102,23 @@ function M.reorder_footnotes()
     end
 end
 
+function M.insert_footnote()
+    -- Insert zero footnote
+    local row, col
+    row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { "[^0]" })
+
+    -- New buffer
+    vim.api.nvim_command(":below 4split")
+    vim.api.nvim_command('norm! Go')
+    row, col = unpack(vim.api.nvim_win_get_cursor(0))
+
+    -- Insert footnote body
+    vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { "[^0]: " })
+    vim.api.nvim_command('norm! A')
+
+    -- Reorder
+    M.reorder_footnotes()
+end
+
 return M
