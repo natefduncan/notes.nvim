@@ -16,7 +16,10 @@ command! -nargs=0 FindFootnotes lua require("notes").find_footnotes()
 command! -nargs=0 ReorderFootnotes lua require("notes").reorder_footnotes()
 command! -nargs=0 InsertFootnote lua require("notes").insert_footnote()
 command! -nargs=0 SortFooter lua require("notes").sort_footer()
+command! -nargs=0 InsertBlockquotes lua require("notes").insert_blockquotes()
 
 " Define mappings
 nmap <silent> ,, :InsertFootnote<CR>
 nmap <silent> << :close<CR>
+vmap <silent> ]] :<C-U>InsertBlockquotes<CR>
+
