@@ -15,5 +15,6 @@ exe "lua package.path = package.path .. ';" . s:lua_deps_loc . "/lua-?/init.lua'
 command! -nargs=0 FindFootnotes lua require("notes").find_footnotes()
 command! -nargs=0 ReorderFootnotes lua require("notes").reorder_footnotes()
 command! -nargs=0 InsertFootnote lua require("notes").insert_footnote()
+command! -nargs=0 SortFooter lua require("notes").sort_footer()
 
 

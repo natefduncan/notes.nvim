@@ -5,6 +5,13 @@ function M.buffer_to_string()
     return table.concat(content, "\n")
 end
 
+function M.table_length(T)
+  local count = 0
+  for _ in pairs(T) do count = count + 1 end
+  return count
+end
+
+
 function M.string_to_buffer(string)
     local sep = "\n"
     local t={}
@@ -14,6 +21,11 @@ function M.string_to_buffer(string)
     local buf = vim.api.nvim_get_current_buf()
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, t)
 end
+
+function M.string_starts(String,Start)
+   return string.sub(String,1,string.len(Start))==Start
+end
+
 
 local function dump(o)
    if type(o) == 'table' then

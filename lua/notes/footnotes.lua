@@ -45,14 +45,14 @@ local function find_footnotes (content)
             local ref
             -- numbered footnote
             if i_min == i_n then
-                body_pattern = "%[%^" .. ref_n .. "%]: (.-\n)"
+                body_pattern = "%[%^" .. ref_n .. "%]: (.-)\n"
                 ref = ref_n
                 i = i_n or i
             end
 
             -- footnote
             if i_min == i_s then
-                body_pattern = "%[%^" .. ref_s .. "%]: (.-\n)"
+                body_pattern = "%[%^" .. ref_s .. "%]: (.-)\n"
                 ref = ref_s
                 i = i_s or i
             end
@@ -84,6 +84,43 @@ local function replace_ref(old_ref, new_ref)
     vim.api.nvim_command(cmd)
 end
 
+function M.sort_footer()
+    local lines = vim.api.nvim_buf_get_lines(0, 0, vim.api.nvim_buf_line_count(0), false)
+    local content = utils.buffer_to_string()
+    local footnotes = find_footnotes(content)
+
+    -- Find start and end row for footnotes
+    local end_row
+    local start_row
+    for i = #lines, 1, -1 do
+        if utils.string_starts(lines[i], [[[^]]) then
+            if end_row == nil then end_row = i end
+            start_row = i
+        end
+    end
+
+    -- Get footnotes
+    local footer = {}
+    for _, note in pairs(footnotes) do
+        if note[1] ~= nil then
+            table.insert(footer, note)
+        end
+    end
+
+    -- Delete footer rows
+    vim.api.nvim_command(":" .. start_row)
+    vim.api.nvim_command(": norm! " .. end_row - start_row + 1 .. "ddj")
+
+    -- Insert footer in correct order
+    for i = 1, #footer do
+        vim.api.nvim_command(": norm! o")
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        local ref = footer[i][1]
+        local body = footer[i][2]
+        vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { "[^" .. ref .. "]: " ..  body})
+    end
+end
+
 function M.reorder_footnotes()
     local content = utils.buffer_to_string()
     local footnotes = find_footnotes(content)
@@ -100,6 +137,7 @@ function M.reorder_footnotes()
     for holder, i in pairs(holders) do
         replace_ref(holder, i)
     end
+    M.sort_footer()
 end
 
 function M.insert_footnote()
