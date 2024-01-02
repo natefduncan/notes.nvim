@@ -151,7 +151,7 @@ function M.insert_footnote()
     -- Insert zero footnote
     local row, col
     row, col = unpack(vim.api.nvim_win_get_cursor(0))
-    vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { "[^0]" })
+    vim.api.nvim_buf_set_text(0, row - 1, col+1, row - 1, col+1, { "[^0]" })
 
     -- New buffer
     vim.api.nvim_command(":below 4split")
