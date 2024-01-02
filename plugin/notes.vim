@@ -17,4 +17,5 @@ command! -nargs=0 ReorderFootnotes lua require("notes").reorder_footnotes()
 command! -nargs=0 InsertFootnote lua require("notes").insert_footnote()
 command! -nargs=0 SortFooter lua require("notes").sort_footer()
 
-
+" Default mappings
+nmap <,> :InsertFootnote<CR>

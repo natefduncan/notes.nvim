@@ -85,18 +85,25 @@ local function replace_ref(old_ref, new_ref)
 end
 
 function M.sort_footer()
-    local lines = vim.api.nvim_buf_get_lines(0, 0, vim.api.nvim_buf_line_count(0), false)
     local content = utils.buffer_to_string()
     local footnotes = find_footnotes(content)
+    local cur_row, cur_col = unpack(vim.api.nvim_win_get_cursor(0))
+    vim.api.nvim_command(": norm! G")
+    local last_row, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
     -- Find start and end row for footnotes
     local end_row
     local start_row
-    for i = #lines, 1, -1 do
-        if utils.string_starts(lines[i], [[[^]]) then
-            if end_row == nil then end_row = i end
-            start_row = i
+    for i = last_row, 1, -1 do
+        vim.api.nvim_command(":" .. last_row)
+        local current_line = vim.api.nvim_get_current_line()
+        local is_footer = utils.string_starts(current_line, [[[^]])
+        if is_footer then
+            if end_row == nil then end_row = last_row end
+            start_row = last_row
         end
+        if start_row ~= nil and end_row ~= nil and is_footer == false then break end
+        last_row = last_row - 1
     end
 
     -- Get footnotes

@@ -11,16 +11,17 @@ function M.table_length(T)
   return count
 end
 
-
-function M.string_to_buffer(string)
-    local sep = "\n"
+function M.string_split(inputstr, sep)
+    if sep == nil then
+        sep = "%s"
+    end
     local t={}
-    for str in string.gmatch(string, "([^"..sep.."]+)") do
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
         table.insert(t, str)
     end
-    local buf = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_lines(buf, 0, -1, true, t)
+    return t
 end
+
 
 function M.string_starts(String,Start)
    return string.sub(String,1,string.len(Start))==Start
